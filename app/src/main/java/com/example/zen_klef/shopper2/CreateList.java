@@ -1,10 +1,12 @@
 package com.example.zen_klef.shopper2;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,6 +27,7 @@ public class CreateList extends AppCompatActivity {
     EditText dateEditText;
     EditText storeEditText;
     Calendar calendar;
+    DBHandler dbHandler;
 
 
     @Override
@@ -48,7 +51,7 @@ public class CreateList extends AppCompatActivity {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-               updateDueDate();
+                updateDueDate();
 
             }
         };
@@ -67,8 +70,11 @@ public class CreateList extends AppCompatActivity {
             }
         });
 
-
+        dbHandler = new DBHandler(this, null);
     }
+
+
+
 
 
     public void updateDueDate(){
@@ -87,6 +93,7 @@ dateEditText.setText(sdf.format(calendar.getTime()));
         if (name.trim().equals("") || store.trim().equals("") || date.trim().equals("")) {
             Toast.makeText(this, "Please enter name, store, and date!", Toast.LENGTH_LONG).show();
         } else {
+            dbHandler.addShoppingList(name, store, date);
             Toast.makeText(this, "Shopping List Created!", Toast.LENGTH_LONG).show();
         }
 
@@ -119,4 +126,6 @@ dateEditText.setText(sdf.format(calendar.getTime()));
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 }
